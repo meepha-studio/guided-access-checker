@@ -1,0 +1,9 @@
+{
+  "platforms": ["apple", "android", "web"],
+  "apple": {
+    "modules": ["GuidedAccessCheckerModule"]
+  },
+  "android": {
+    "modules": ["expo.modules.guidedaccesschecker.GuidedAccessCheckerModule"]
+  }
+}
