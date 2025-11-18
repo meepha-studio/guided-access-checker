@@ -2,49 +2,44 @@ package expo.modules.guidedaccesschecker
 
 import expo.modules.kotlin.modules.Module
 import expo.modules.kotlin.modules.ModuleDefinition
-import java.net.URL
+import expo.modules.kotlin.Promise
+import android.util.Log // Importation pour les messages de log
 
 class GuidedAccessCheckerModule : Module() {
-  // Each module class must implement the definition function. The definition consists of components
-  // that describes the module's functionality and behavior.
-  // See https://docs.expo.dev/modules/module-api for more details about available components.
-  override fun definition() = ModuleDefinition {
-    // Sets the name of the module that JavaScript code will use to refer to the module. Takes a string as an argument.
-    // Can be inferred from module's class name, but it's recommended to set it explicitly for clarity.
-    // The module will be accessible from `requireNativeModule('GuidedAccessChecker')` in JavaScript.
-    Name("GuidedAccessChecker")
+    
+    // Nom pour le logging
+    private val TAG = "GuidedAccessChecker"
+    
+    override fun definition() = ModuleDefinition {
+        
+        Name("GuidedAccessChecker")
 
-    // Defines constant property on the module.
-    Constant("PI") {
-      Math.PI
+        // Définir les événements émis (doit correspondre au côté Swift/TS)
+        Events("onGuidedAccessChange")
+
+        // 1. Implémentation de la fonction isGuidedAccessActive()
+        // Elle doit exister pour satisfaire le contrat JavaScript, même si elle retourne false.
+        Function("isGuidedAccessActive") {
+            Log.d(TAG, "isGuidedAccessActive appelé sur Android. Retourne toujours false.")
+            // L'Accès Guidé (iOS) n'existe pas sur Android.
+            return@Function false 
+        }
+
+        // 2. Implémentation des fonctions d'observation (pour les Events)
+        // Elles doivent être implémentées pour que la partie iOS puisse émettre des événements.
+        
+        OnStartObserving {
+            Log.d(TAG, "OnStartObserving appelé sur Android. Aucune écoute native démarrée.")
+            // Sur Android, on ne démarre pas d'observateur natif. 
+            // Si vous vouliez implémenter l'Épinglage d'Écran, ce serait ici.
+        }
+
+        OnStopObserving {
+            Log.d(TAG, "OnStopObserving appelé sur Android. Aucune écoute native arrêtée.")
+            // Pas d'observateur à arrêter.
+        }
+        
+        // Note: Vous n'avez pas besoin d'une méthode Kotlin pour envoyer les événements
+        // car le statut ne changera jamais pour cette API spécifique sur Android.
     }
-
-    // Defines event names that the module can send to JavaScript.
-    Events("onChange")
-
-    // Defines a JavaScript synchronous function that runs the native code on the JavaScript thread.
-    Function("hello") {
-      "Hello world! 👋"
-    }
-
-    // Defines a JavaScript function that always returns a Promise and whose native code
-    // is by default dispatched on the different thread than the JavaScript runtime runs on.
-    AsyncFunction("setValueAsync") { value: String ->
-      // Send an event to JavaScript.
-      sendEvent("onChange", mapOf(
-        "value" to value
-      ))
-    }
-
-    // Enables the module to be used as a native view. Definition components that are accepted as part of
-    // the view definition: Prop, Events.
-    View(GuidedAccessCheckerView::class) {
-      // Defines a setter for the `url` prop.
-      Prop("url") { view: GuidedAccessCheckerView, url: URL ->
-        view.webView.loadUrl(url.toString())
-      }
-      // Defines an event that the view can send to JavaScript.
-      Events("onLoad")
-    }
-  }
 }

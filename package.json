@@ -1,7 +1,7 @@
 {
   "name": "guided-access-checker",
   "version": "0.1.0",
-  "description": "My new module",
+  "description": "A React Native module to check if Guided Access is enabled on iOS devices.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "scripts": {
@@ -21,13 +21,13 @@
     "guided-access-checker",
     "GuidedAccessChecker"
   ],
-  "repository": "https://meepha",
+  "repository": "https://meepha.com",
   "bugs": {
-    "url": "https://meepha/issues"
+    "url": "https://meepha.com/contact"
   },
   "author": "Loup Marandet <loup.m@meepha.com> (loupmarandet)",
   "license": "MIT",
-  "homepage": "https://meepha#readme",
+  "homepage": "https://meepha.com#readme",
   "dependencies": {},
   "devDependencies": {
     "@types/react": "~19.1.0",

@@ -1,73 +1,54 @@
-import { useEvent } from 'expo';
-import GuidedAccessChecker, { GuidedAccessCheckerView } from 'guided-access-checker';
-import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { isGuidedAccessActive, addGuidedAccessChangeListener } from 'guided-access-checker';
 
-export default function App() {
-  const onChangePayload = useEvent(GuidedAccessChecker, 'onChange');
+export default function AppLockStatus() {
+  const [isActive, setIsActive] = useState(false);
+
+  useEffect(() => {
+    // 1. Charger l'état initial
+    isGuidedAccessActive().then(setIsActive);
+
+    // 2. S'abonner aux mises à jour en temps réel
+    const subscription = addGuidedAccessChangeListener((event) => {
+      console.log('Changement détecté ! Nouveau statut:', event.isActive);
+      setIsActive(event.isActive);
+    });
+
+    // 3. Nettoyage : retirer l'abonnement lorsque le composant est démonté
+    return () => subscription.remove();
+  }, []); // Le tableau vide assure que l'effet s'exécute seulement au montage/démontage
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView style={styles.container}>
-        <Text style={styles.header}>Module API Example</Text>
-        <Group name="Constants">
-          <Text>{GuidedAccessChecker.PI}</Text>
-        </Group>
-        <Group name="Functions">
-          <Text>{GuidedAccessChecker.hello()}</Text>
-        </Group>
-        <Group name="Async functions">
-          <Button
-            title="Set value"
-            onPress={async () => {
-              await GuidedAccessChecker.setValueAsync('Hello from JS!');
-            }}
-          />
-        </Group>
-        <Group name="Events">
-          <Text>{onChangePayload?.value}</Text>
-        </Group>
-        <Group name="Views">
-          <GuidedAccessCheckerView
-            url="https://www.example.com"
-            onLoad={({ nativeEvent: { url } }) => console.log(`Loaded: ${url}`)}
-            style={styles.view}
-          />
-        </Group>
-      </ScrollView>
-    </SafeAreaView>
-  );
-}
-
-function Group(props: { name: string; children: React.ReactNode }) {
-  return (
-    <View style={styles.group}>
-      <Text style={styles.groupHeader}>{props.name}</Text>
-      {props.children}
+    <View style={styles.container}>
+      <Text style={styles.statusText}>
+        Statut de l'Accès Guidé :
+      </Text>
+      <Text style={[styles.valueText, isActive ? styles.active : styles.inactive]}>
+        {isActive ? 'VERROUILLÉ' : 'DÉVERROUILLÉ'}
+      </Text>
     </View>
   );
 }
 
-const styles = {
-  header: {
-    fontSize: 30,
-    margin: 20,
-  },
-  groupHeader: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  group: {
-    margin: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 20,
-  },
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#eee',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  view: {
-    flex: 1,
-    height: 200,
+  statusText: {
+    fontSize: 20,
+    marginBottom: 10,
   },
-};
+  valueText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+  },
+  active: {
+    color: 'green',
+  },
+  inactive: {
+    color: 'red',
+  },
+});
