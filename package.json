@@ -1,6 +1,6 @@
 {
   "name": "guided-access-checker",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A React Native module to check if Guided Access is enabled on iOS devices.",
   "main": "build/index.js",
   "types": "build/index.d.ts",
