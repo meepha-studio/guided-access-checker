@@ -1,6 +1,39 @@
 # guided-access-checker
 
-A React Native module to check if Guided Access is enabled on iOS devices.
+
+
+`guided-access-checker` is a React Native/Expo module that allows you to:
+
+- Check if Guided Access mode is enabled on an iOS device.
+- Subscribe to real-time Guided Access status changes (native event listening).
+
+This module is useful to adapt your app's interface or behavior when the user enables or disables Guided Access.
+# API documentation
+
+## Main features
+
+- `isGuidedAccessActive() : Promise<boolean>`:
+	Checks if Guided Access is currently enabled.
+- `addGuidedAccessChangeListener(listener)`:
+	Subscribes to Guided Access status changes. The listener receives an object `{ isActive: boolean }` on each change.
+
+## Usage example
+
+```tsx
+import { isGuidedAccessActive, addGuidedAccessChangeListener } from 'guided-access-checker';
+
+// Check current status
+const isActive = await isGuidedAccessActive();
+console.log('Guided Access active?', isActive);
+
+// Subscribe to changes
+const subscription = addGuidedAccessChangeListener((event) => {
+	console.log('New Guided Access status:', event.isActive);
+});
+
+// ...later, to unsubscribe:
+subscription.remove();
+```
 
 # API documentation
 
