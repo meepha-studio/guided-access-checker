@@ -1,5 +1,4 @@
 // Implémentation web factice pour GuidedAccessChecker
-
 export function isGuidedAccessEnabled() {
     // Toujours désactivé sur le web
     return false;

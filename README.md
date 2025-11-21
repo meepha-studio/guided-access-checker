@@ -8,6 +8,18 @@
 - Subscribe to real-time Guided Access status changes (native event listening).
 
 This module is useful to adapt your app's interface or behavior when the user enables or disables Guided Access.
+
+
+## ⚠️ Web Support
+
+If you add this module to an Expo project with web support, make sure to install the following dependencies:
+
+```sh
+npx expo install react-dom react-native-web @expo/metro-runtime
+```
+
+This ensures the dummy web implementation works correctly and prevents import errors.
+
 # API documentation
 
 ## Main features
