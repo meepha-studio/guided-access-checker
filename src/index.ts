@@ -9,17 +9,17 @@ const emitter = new EventEmitter(GuidedAccessChecker);
 
 // Interface pour le payload de l'événement
 export type GuidedAccessEvent = {
-    isActive: boolean;
+  isActive: boolean;
 };
 
 // 3. Fonction pour obtenir le statut (inchangée)
 export async function isGuidedAccessActive(): Promise<boolean> {
-    return await GuidedAccessChecker.isGuidedAccessActive();
+  return await GuidedAccessChecker.isGuidedAccessActive();
 }
 
 // 4. Fonction pour s'abonner aux changements
 export function addGuidedAccessChangeListener(listener: (event: GuidedAccessEvent) => void): NativeEventSubscription {
-  
+
   // Appliquez l'assertion de type 'any' à la méthode addListener elle-même.
   // Cela contourne les problèmes de contraintes de type générique (never) 
   // car le nom de l'événement est défini dynamiquement côté natif.
